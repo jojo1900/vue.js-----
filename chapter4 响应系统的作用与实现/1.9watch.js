@@ -28,7 +28,8 @@ function track(target, key) {
 }
 
 function trigger(target, key) {
-  debugger;
+  // debugger;
+
   const effectFns = effectFnMap[target][key];
   const effectFnsToTun = new Set();
 
@@ -97,12 +98,12 @@ function computed(getter) {
   const effectFn = effect(getter, {
     lazy: true,
   });
-  const obj = {
-    get value() {
+  const obj = Object.defineProperty({}, 'a', {
+    get() {
       return effectFn();
     },
-  };
-  return obj.value;
+  });
+  return obj;
 }
 
 // 应用
@@ -113,8 +114,8 @@ let computedData = computed(() => {
   return foo.a + foo.b;
 });
 
-console.log(computedData);
+console.log(computedData.a);
 
-foo.a = 3;
+foo.a = 5;
 
-console.log(computedData);
+console.log(computedData.a);
